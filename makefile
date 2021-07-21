@@ -5,7 +5,7 @@ CXX := c++
 BUILD_DIR := ./build
 SRC_DIRS := ./src
 # Get all the c++/c files
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp or -name *.c)
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -o -name *.c)
 # String Substitute every c/c++ that was found in SRCs.
 # IE. hello.cpp becomes ./build/hello.cpp.o
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
@@ -20,7 +20,7 @@ LIBS :=
 CFLAGS := -Wall -g
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP
+CPPFLAGS := $(INC_FLAGS) --std=c++17 -MMD -MP
 
 # Include the .d makefiles. The - at the front suresses the errors of missing
 # # Makefiles. Initially, all the .d files will be missing, and we don't want those
@@ -41,16 +41,16 @@ $(BUILD_DIR)/%.c.o: %.c
 #BUILD: c++ sources
 #TODO CXXFLAGS
 $(BUILD_DIR)/%.c.o: %.c
-    mkdir -p $(dir $@)
-    $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 
 #OTHER COMMANDS:
 clean:
-   -@rm -rvf $(BUILD_DIR)
+	-@rm -rvf $(BUILD_DIR)
 
 info:
-   @echo "[*] Object dir:      ${OBJ_DIR}     "
-   @echo "[*] Sources:         ${SRC}         "
-   @echo "[*] Objects:         ${OBJECTS}     "
-   @echo "[*] Dependencies:    ${DEPENDENCIES}"
+	@echo "[*] Object dir:		${OBJ_DIR}	"
+	@echo "[*] Sources:			${SRCS}		"
+	@echo "[*] Objects:			${OBJS}	   	"
+	@echo "[*] Dependencies:	${LIBS}		"
